@@ -17,6 +17,8 @@ from imutils import paths
 import numpy as np
 import argparse
 import os
+import matplotlib.pyplot as plt
+import matplotlib.image as img
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -79,8 +81,30 @@ model.compile(loss="categorical_crossentropy", optimizer=opt,
 H = model.fit(trainX, trainY, validation_data=(testX, testY),
 	epochs=50, batch_size=32)
 
-# evaluate the network
-print("[INFO] evaluating network...")
-predictions = model.predict(testX, batch_size=32)
-print(classification_report(testY.argmax(axis=1),
-	predictions.argmax(axis=1), target_names=lb.classes_))
+for key, value in H.history.iteritems():
+	print "----------{0}----------".format(key)
+	print value
+
+epoch_list = [x for x in range(1, 51)]
+plt.figure(1)
+plt.plot(epoch_list, H.history["accuracy"], "go--", label="accuracy")
+plt.plot(epoch_list, H.history["val_accuracy"], "r+", label="val_accuracy")
+plt.xlabel("epochs")
+plt.ylabel("accuracy")
+plt.legend()
+plt.figure(3)
+plt.plot(epoch_list, H.history["loss"], "bo", label="loss")
+plt.plot(epoch_list, H.history["val_loss"], "r+", label="val_loss")
+plt.xlabel("epochs")
+plt.ylabel("loss")
+plt.legend()
+plt.show()
+
+
+
+# # evaluate the network
+# print("[INFO] evaluating network...")
+# predictions = model.predict(testX, batch_size=32)
+# print(classification_report(testY.argmax(axis=1),
+# 	predictions.argmax(axis=1), target_names=lb.classes_))
+

@@ -14,6 +14,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.datasets import load_iris, load_breast_cancer
 import argparse
+import matplotlib.pyplot as plt
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -56,5 +57,14 @@ model.fit(trainX, trainY)
 # make predictions on our data and show a classification report
 print("[INFO] evaluating...")
 predictions = model.predict(testX)
+
+for test, actual, prediction in zip(testX, testY, predictions):
+	print "{0} : {1} : {2}".format(test,actual, prediction)
+	if actual != prediction:
+		print "-----"
+
+plt.plot(testX, testY)
+plt.show()
+
 print(classification_report(testY, predictions,
 	target_names=dataset.target_names))
